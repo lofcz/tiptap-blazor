@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TipTap Blazor Test</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <link href="../dist/style.css" rel="stylesheet">
+    <script src="../dist/tiptap-island.umd.js"></script>
+
+    <style>
+        #debug {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+        }
+        .controls {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="createEditor()">Create Editor</button>
+        <button onclick="destroyEditor()">Destroy Editor</button>
+    </div>
+
+    <div style="width: 400px; height: 300px; border: 1px solid black;" id="editor"></div>
+    
+    <div id="debug">
+        <pre id="content-debug"></pre>
+    </div>
+
+    <script>
+        let editor = null;
+
+        function createEditor() {
+            if (editor) return;
+            
+            editor = TipTapIsland.create('editor', {
+                content: '<p>Hello from TipTap!</p>',
+                onUpdate: (html) => {
+                    document.getElementById('content-debug').textContent = html;
+                }
+            });
+        }
+
+        function destroyEditor() {
+            if (editor) {
+                editor.unmount();
+                editor = null;
+                document.getElementById('content-debug').textContent = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', createEditor);
+    </script>
+</body>
+</html>
