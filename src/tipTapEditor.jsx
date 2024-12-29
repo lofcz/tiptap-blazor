@@ -74,7 +74,8 @@ const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
             if (editor) {
                 editor.destroy()
             }
-        }
+        },
+        editor: editor
     }), [editor])
 
     return (

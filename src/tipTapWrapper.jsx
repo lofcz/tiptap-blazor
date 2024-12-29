@@ -18,6 +18,12 @@ class TipTapWrapper {
         this.root = ReactDOMInstance.createRoot(element)
     }
 
+    setContent(content) {
+        if (this.editorRef.current?.editor) {
+            this.editorRef.current.editor.commands.setContent(content)
+        }
+    }
+
     mount() {
         if (this.root) {
             this.root.render(
