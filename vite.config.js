@@ -1,6 +1,8 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
 import {resolve} from 'path'
+import svgr from 'vite-plugin-svgr';
+import dynamicImportVars  from '@rollup/plugin-dynamic-import-vars';
 
 export default defineConfig({
     define: {
@@ -12,6 +14,12 @@ export default defineConfig({
         open: 'src/index.html'
     },
     plugins: [
+        svgr({
+            svgrOptions: {
+                icon: true,
+                dimensions: false
+            }
+        }),
         react({
             babel: {
                 plugins: [
@@ -37,7 +45,10 @@ export default defineConfig({
                     'react': 'React',
                     'react-dom': 'ReactDOM',
                     'react-dom/client': 'ReactDOM'
-                }
+                },
+                chunkFileNames: '[name].js',
+                manualChunks: undefined,
+                inlineDynamicImports: true
             }
         },
         cssCodeSplit: false,

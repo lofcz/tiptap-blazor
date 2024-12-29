@@ -7,6 +7,7 @@ import {Color} from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import ColorPicker from './ColorPicker.jsx'
+import ToolbarButton from "./ToolbarButton.jsx";
 
 const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
     const editor = useEditor({
@@ -103,30 +104,30 @@ const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
                 updateDelay={120}
             >
                 <div className="bubble-menu">
-                    <button
+                    <ToolbarButton
+                        icon="bold"
+                        tooltip="Bold"
+                        isActive={editor.isActive('bold')}
                         onClick={() => handleToolbarAction(() =>
                             editor.chain().focus().toggleBold().run()
                         )}
-                        className={editor.isActive('bold') ? 'is-active' : ''}
-                    >
-                        Bold
-                    </button>
-                    <button
+                    />
+                    <ToolbarButton
+                        icon="italic"
+                        tooltip="Italic"
+                        isActive={editor.isActive('italic')}
                         onClick={() => handleToolbarAction(() =>
                             editor.chain().focus().toggleItalic().run()
                         )}
-                        className={editor.isActive('italic') ? 'is-active' : ''}
-                    >
-                        Italic
-                    </button>
-                    <button
+                    />
+                    <ToolbarButton
+                        icon="strike"
+                        tooltip="Strike"
+                        isActive={editor.isActive('strike')}
                         onClick={() => handleToolbarAction(() =>
                             editor.chain().focus().toggleStrike().run()
                         )}
-                        className={editor.isActive('strike') ? 'is-active' : ''}
-                    >
-                        Strike
-                    </button>
+                    />
                     <ColorPicker
                         editor={editor}
                         type="text"
