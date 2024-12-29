@@ -7,7 +7,7 @@ import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import ColorPicker from './ColorPicker.jsx'
 import ToolbarButton from "./ToolbarButton.jsx"
-import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji'
+// import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji'
 import suggestion from './suggestion'
 import BulletList from '@tiptap/extension-bullet-list'
 import ListItem from '@tiptap/extension-list-item'
@@ -65,11 +65,11 @@ const TipTapEditor = forwardRef((
             Color,
             TextStyle,
             Highlight.configure({multicolor: true}),
-            Emoji.configure({
+            /*Emoji.configure({
                 emojis: gitHubEmojis,
                 enableEmoticons: true,
                 suggestion,
-            }),
+            }),*/
             CustomBulletList,
             ListItem,
             OrderedList,
@@ -86,7 +86,12 @@ const TipTapEditor = forwardRef((
                 onUpdate(editor.getHTML())
             }
         },
-        editable: isEditable
+        editable: isEditable,
+        onCreate: ({ editor }) => {
+            editor.view.dom.setAttribute("data-gramm", "false");
+            editor.view.dom.setAttribute("data-enable-grammarly", "false");
+            editor.view.dom.setAttribute("data-gramm_editor", "false");
+        },
     })
 
     const [activeColorPicker, setActiveColorPicker] = useState(null)

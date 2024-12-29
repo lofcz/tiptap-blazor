@@ -39,11 +39,6 @@ body {
   margin-top: 0;
 }
 
-.tiptap {
-  caret-color: var(--purple);
-  margin: 1.5rem;
-}
-
 .tiptap:focus {
   outline: none;
 }
@@ -842,6 +837,10 @@ ul[data-type=taskList] ul[data-type=taskList] {
   opacity: 1;
   visibility: visible;
   transition-delay: 0s;
+}
+
+.tiptap ~ grammarly-extension {
+  display: none;
 }
 
 /*# sourceMappingURL=styles.css.map */
