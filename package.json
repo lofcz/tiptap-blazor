@@ -33,6 +33,7 @@
     "@tiptap/extension-document": "^2.10.4",
     "@tiptap/extension-dropcursor": "^2.10.4",
     "@tiptap/extension-highlight": "^2.10.4",
+    "@tiptap/extension-history": "^2.10.4",
     "@tiptap/extension-italic": "^2.10.4",
     "@tiptap/extension-link": "^2.10.4",
     "@tiptap/extension-list-item": "^2.10.4",

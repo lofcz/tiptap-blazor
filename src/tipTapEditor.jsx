@@ -24,6 +24,7 @@ import Link from '@tiptap/extension-link'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import History from '@tiptap/extension-history'
 
 const CustomBulletList = BulletList.configure({
     HTMLAttributes: {
@@ -76,7 +77,8 @@ const TipTapEditor = forwardRef((
             TaskList,
             TaskItem.configure({
                 nested: true,
-            })
+            }),
+            History
         ],
         content: content,
         onUpdate: ({editor}) => {
@@ -184,6 +186,7 @@ const TipTapEditor = forwardRef((
                         )}
                     />
                     <ColorPicker
+                        icon="color-front"
                         editor={editor}
                         type="text"
                         label="Text Color"
@@ -193,6 +196,7 @@ const TipTapEditor = forwardRef((
                         onOpenChange={() => handleColorPickerOpen('text')}
                     />
                     <ColorPicker
+                        icon="color-back"
                         editor={editor}
                         type="background"
                         label="Background"

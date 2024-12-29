@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
+  transition: all 0.2s cubic-bezier(0.65, 0.05, 0.36, 1);
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
@@ -20,21 +20,24 @@
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+    background-color: var(--gray-1);
+    color: var(--gray-4);
   }
 }
 
 .toolbarIcon {
-  width: 20px;
-  height: 20px;
-  fill: #999;
-  transition: fill 0.2s;
 
   .active & {
     fill: #333;
   }
+
+  width: 18px;
+  height: 18px;
+  fill: var(--black);
+  transition: fill 0.2s cubic-bezier(0.65, 0.05, 0.36, 1);
 }
 
 .iconPlaceholder {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }

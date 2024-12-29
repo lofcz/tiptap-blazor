@@ -1,6 +1,6 @@
 const prefix = "./images/";
 
-const ICONS = {
+export const ICONS = {
     'bold': () => import('./images/bold.svg?react'),
     'italic': () => import('./images/italic.svg?react'),
     'strike': () => import('./images/strike.svg?react'),
@@ -17,6 +17,8 @@ const ICONS = {
     'clean': () => import('./images/clean.svg?react'),
     'undo': () => import('./images/undo.svg?react'),
     'redo': () => import('./images/redo.svg?react'),
+    'color-front': () => import('./images/color-front.svg?react'),
+    'color-back': () => import('./images/color-back.svg?react'),
 };
 
 const iconCache = new Map();

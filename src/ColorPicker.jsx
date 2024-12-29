@@ -1,6 +1,8 @@
 import React, {useState, useCallback, useEffect} from 'react'
 import {HexColorPicker} from 'react-colorful'
 import ColorIndicator from './ColorIndicator.jsx'
+import {ICONS, isIconAvailable, loadIcon} from "./icons.js";
+import styles from './ColorPicker.module.scss'
 
 const COLORS = [
     ['#958DF1', '#F98181', '#FBBC88'],
@@ -15,9 +17,31 @@ const ColorPicker = ({
                          onColorChange,
                          label,
                          isOpen,
-                         onOpenChange
+                         onOpenChange,
+                         icon
                      }) => {
+
     const [showCustomPicker, setShowCustomPicker] = useState(false)
+    const [IconComponent, setIconComponent] = useState(null)
+
+    useEffect(() => {
+        let mounted = true;
+
+        const loadIconComponent = async () => {
+            if (isIconAvailable(icon)) {
+                const Component = await loadIcon(icon);
+                if (mounted && Component) {
+                    setIconComponent(() => Component);
+                }
+            }
+        };
+
+        loadIconComponent();
+
+        return () => {
+            mounted = false;
+        };
+    }, [icon]);
 
     useEffect(() => {
         if (!isOpen) {
@@ -46,13 +70,24 @@ const ColorPicker = ({
 
 
     return (
-        <div className="color-picker-wrapper">
+        <div className={styles.colorPickerWrapper}>
             <button
-                className="color-picker-trigger"
+                className={styles.colorPickerTrigger}
                 onClick={() => onOpenChange()}
-                title={label}
+                data-tooltip={label}
             >
-                <ColorIndicator color={currentColor} type={type}/>
+                {IconComponent ? (
+                    <IconComponent className={styles.toolbarIcon} />
+                ) : (
+                    <div className={styles.iconPlaceholder} />
+                )}
+                <div
+                    className={styles.colorIndicator}
+                    style={{
+                        backgroundColor: currentColor || 'transparent',
+                        border: currentColor ? 'none' : `1px solid var(--gray-3)`
+                    }}
+                />
             </button>
 
             {isOpen && (

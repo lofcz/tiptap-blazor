@@ -491,6 +491,7 @@ kbd {
   box-shadow: var(--shadow);
   display: flex;
   padding: 0.2rem;
+  gap: 2px;
 }
 .bubble-menu button {
   background-color: unset;
@@ -813,6 +814,34 @@ ul[data-type=taskList] input[type=checkbox] {
 }
 ul[data-type=taskList] ul[data-type=taskList] {
   margin: 0;
+}
+
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transition-delay: 0s;
+}
+[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
 }
 
 /*# sourceMappingURL=styles.css.map */
