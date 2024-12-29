@@ -2,6 +2,9 @@ import {defineConfig} from 'vite'
 
 export default defineConfig({
     server: {
-        open: 'test.html'
+        open: 'src/test.html'
+    },
+    build: {
+        emptyOutDir: false
     }
 })

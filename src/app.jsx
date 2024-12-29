@@ -1,20 +1,19 @@
 import React, {useState, useEffect, useRef} from 'react'
-import TipTapIsland from './tiptap-island'
+import TipTapIsland from './tiptap-island.js'
 import './styles.scss'
 
-function App() {
-    const [content, setContent] = useState('<p>Hello TipTap!</p>')
+function App({ initialContent = '<p>Hello TipTap!</p>', editorId = 'test-editor' }) {
+    const [content, setContent] = useState(initialContent)
     const editorRef = useRef(null)
     const containerRef = useRef(null)
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             if (!editorRef.current && containerRef.current) {
-                editorRef.current = TipTapIsland.create('test-editor', {
+                editorRef.current = TipTapIsland.create(editorId, {
                     content: content,
                     onUpdate: (newContent) => {
                         setContent(newContent)
-                        console.log('Content updated:', newContent)
                     }
                 })
             }
@@ -28,14 +27,14 @@ function App() {
                 editorRef.current = null
             }
         }
-    }, [])
+    }, [editorId])
 
     return (
         <div className="app-container">
             <h1>TipTap Editor Test</h1>
 
             <div className="editor-container">
-                <div id="test-editor" ref={containerRef}></div>
+                <div id={editorId} ref={containerRef}></div>
             </div>
 
             <div className="content-preview">

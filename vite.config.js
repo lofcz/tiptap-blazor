@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react'
 import {resolve} from 'path'
 
 export default defineConfig({
+    server: {
+        open: 'src/index.html'
+    },
     plugins: [
         react({
             babel: {
@@ -17,7 +20,7 @@ export default defineConfig({
     ],
     build: {
         lib: {
-            entry: resolve(__dirname, 'tiptap-island.js'),
+            entry: resolve(__dirname, 'src/tiptap-island.js'),
             name: 'TipTapIsland',
             formats: ['es', 'umd'],
             fileName: (format) => `tiptap-island.${format}.js`
@@ -32,6 +35,7 @@ export default defineConfig({
                 }
             }
         },
-        cssCodeSplit: false
+        cssCodeSplit: false,
+        emptyOutDir: false
     }
 })

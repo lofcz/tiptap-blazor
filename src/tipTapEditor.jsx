@@ -2,13 +2,13 @@ import {
     BubbleMenu, EditorContent, useEditor,
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import React, {useEffect, useState} from 'react'
+import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react'
 import {Color} from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
-import ColorPicker from './ColorPicker'
+import ColorPicker from './ColorPicker.jsx'
 
-const TipTapEditor = ({content, onUpdate}) => {
+const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -68,6 +68,14 @@ const TipTapEditor = ({content, onUpdate}) => {
     const handleToolbarVisibilityChange = (visible) => {
         setIsToolbarVisible(visible)
     }
+
+    useImperativeHandle(ref, () => ({
+        destroy: () => {
+            if (editor) {
+                editor.destroy()
+            }
+        }
+    }), [editor])
 
     return (
         <>
@@ -142,7 +150,7 @@ const TipTapEditor = ({content, onUpdate}) => {
             <EditorContent editor={editor}/>
         </>
     )
-}
+})
 
 export default TipTapEditor
   

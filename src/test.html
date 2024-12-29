@@ -22,14 +22,14 @@
 </head>
 <body>
 
-<p>This is vanilla JS environment</p>
+<p style="text-align: center;">Vanilla JS environment</p>
 
 <div class="controls">
     <button onclick="createEditor()">Create Editor</button>
     <button onclick="destroyEditor()">Destroy Editor</button>
 </div>
 
-<div style="width: 400px; height: 300px; border: 1px solid black;" id="editor"></div>
+<div style="width: 400px; height: 300px; border: 1px solid black;" id="custom-editor"></div>
 
 <div id="debug">
     <pre id="content-debug"></pre>
@@ -41,8 +41,8 @@
     function createEditor() {
         if (editor) return;
 
-        editor = TipTapIsland.create('editor', {
-            content: '<p>Hello from TipTap!</p>',
+        editor = TipTapIsland.create('custom-editor', {
+            content: '<p>Custom initial content!</p>',
             onUpdate: (html) => {
                 document.getElementById('content-debug').textContent = html;
             }
@@ -51,9 +51,9 @@
 
     function destroyEditor() {
         if (editor) {
-            editor.unmount();
-            editor = null;
-            document.getElementById('content-debug').textContent = '';
+            editor.destroy();
+            editor = undefined;
+            delete window.editor;
         }
     }
 

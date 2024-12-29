@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react'
 import {HexColorPicker} from 'react-colorful'
-import ColorIndicator from './ColorIndicator'
+import ColorIndicator from './ColorIndicator.jsx'
 
 const COLORS = [
     ['#958DF1', '#F98181', '#FBBC88'],
