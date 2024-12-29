@@ -50,10 +50,16 @@ let editor = window["TipTapIsland"].create(pars.id, {
 
 The following methods are available on the editor:
 
-```js
-setContent(html); // sets content of the editor
-destroy(); // removes editor and associated events
-```
+## API
+
+The following methods are available on the editor:
+
+| Method | Description |
+|--------|-------------|
+| `setContent(html)` | Sets content of the editor |
+| `destroy()` | Removes editor and associated events |
+| `setEditable(editable)` | Enables/disables input |
+| `isEditable` | Returns whether input is enabled |
 
 ## Development
 
