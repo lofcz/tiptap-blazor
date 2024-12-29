@@ -54,3 +54,7 @@ The following methods are available on the editor:
 setContent(html); // sets content of the editor
 destroy(); // removes editor and associated events
 ```
+
+## Development
+
+Start Vite environment by running `npm run dev`.
