@@ -17,7 +17,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vite --config vite.config.test.js"
+    "test": "npm run build && vite --config vite.config.test.js",
+    "build-react": "rollup -c rollup.config.react.js"
   },
   "dependencies": {
     "@babel/plugin-transform-react-jsx": "^7.25.9",
@@ -36,11 +37,16 @@
     "react-dom": "^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-replace": "^6.0.2",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "rollup": "^4.29.1",
     "vite": "^4.5.5"
   }
 }
