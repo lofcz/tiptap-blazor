@@ -786,4 +786,9 @@ kbd {
   margin-top: 4px;
 }
 
+[data-type=emoji] img {
+  height: 1em;
+  width: 1em;
+}
+
 /*# sourceMappingURL=styles.css.map */

@@ -1,21 +1,62 @@
 import {
-    BubbleMenu, EditorContent, useEditor,
+    BubbleMenu, EditorContent, textInputRule, useEditor, wrappingInputRule,
 } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react'
 import {Color} from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import ColorPicker from './ColorPicker.jsx'
-import ToolbarButton from "./ToolbarButton.jsx";
+import ToolbarButton from "./ToolbarButton.jsx"
+import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji'
+import suggestion from './suggestion'
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item'
+import OrderedList from '@tiptap/extension-ordered-list'
+import Document from '@tiptap/extension-document'
+import Text from '@tiptap/extension-text'
+import Paragraph from '@tiptap/extension-paragraph'
 
-const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
+const CustomBulletList = BulletList.configure({
+    HTMLAttributes: {
+        class: 'bullet-list',
+    },
+}).extend({
+    addInputRules() {
+        return [
+            wrappingInputRule({
+                find: /^-\s$/, // hledá "- " na začátku řádku
+                type: this.type,
+                keepMarks: true,
+                keepAttributes: true,
+                getAttributes: () => this.options.HTMLAttributes,
+            }),
+        ]
+    },
+})
+
+const TipTapEditor = forwardRef((
+    {
+         content,
+         onUpdate,
+         isEditable = true
+    },
+    ref) => {
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            Document,
+            Text,
+            Paragraph,
             Color,
             TextStyle,
-            Highlight.configure({multicolor: true})
+            Highlight.configure({multicolor: true}),
+            Emoji.configure({
+                emojis: gitHubEmojis,
+                enableEmoticons: true,
+                suggestion,
+            }),
+            CustomBulletList,
+            ListItem,
+            OrderedList
         ],
         content: content,
         onUpdate: ({editor}) => {
@@ -23,9 +64,9 @@ const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
                 onUpdate(editor.getHTML())
             }
         },
+        editable: isEditable
     })
 
-    const [isEditable, setIsEditable] = React.useState(true)
     const [activeColorPicker, setActiveColorPicker] = useState(null)
     const [isToolbarVisible, setIsToolbarVisible] = useState(false)
 
@@ -37,7 +78,7 @@ const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
 
     useEffect(() => {
         if (editor) {
-            editor.setEditable(isEditable)
+            editor.editable = isEditable
         }
     }, [isEditable, editor])
 
@@ -76,22 +117,16 @@ const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
                 editor.destroy()
             }
         },
-        editor: editor
+        editor: editor,
+        setEditable: (value) => {
+            if (editor) {
+                editor.setEditable(value)
+            }
+        }
     }), [editor])
 
     return (
         <>
-            <div className="control-group">
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={isEditable}
-                        onChange={() => setIsEditable(!isEditable)}
-                    />
-                    Editable
-                </label>
-            </div>
-
             {editor && <BubbleMenu
 
                 editor={editor}
@@ -149,7 +184,7 @@ const TipTapEditor = forwardRef(({ content, onUpdate }, ref) => {
                 </div>
             </BubbleMenu>}
 
-            <EditorContent editor={editor}/>
+            <EditorContent editor={editor} className={editor && !editor.isEditable ? 'editorDisabled' : ''}/>
         </>
     )
 })

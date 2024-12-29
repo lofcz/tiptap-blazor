@@ -18,6 +18,16 @@ class TipTapWrapper {
         this.root = ReactDOMInstance.createRoot(element)
     }
 
+    setEditable(value) {
+        if (this.editorRef.current?.editor) {
+            this.editorRef.current.editor.setEditable(value)
+        }
+    }
+
+    get isEditable() {
+        return this.editorRef.current?.editor?.isEditable ?? false
+    }
+
     setContent(content) {
         if (this.editorRef.current?.editor) {
             this.editorRef.current.editor.commands.setContent(content)

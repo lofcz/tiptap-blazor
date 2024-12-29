@@ -27,6 +27,7 @@
 <div class="controls">
     <button onclick="createEditor()">Create Editor</button>
     <button onclick="destroyEditor()">Destroy Editor</button>
+    <button onclick="toggleEditor()">Toggle editor editable</button>
 </div>
 
 <div style="width: 400px; height: 300px; border: 1px solid black;" id="custom-editor"></div>
@@ -38,7 +39,7 @@
 <script>
     let editor = null;
 
-    function createEditor() {
+    let createEditor = () => {
         if (editor) return;
 
         editor = TipTapIsland.create('custom-editor', {
@@ -49,11 +50,17 @@
         });
     }
 
-    function destroyEditor() {
+    let destroyEditor = () => {
         if (editor) {
             editor.destroy();
             editor = undefined;
             delete window.editor;
+        }
+    }
+
+    let toggleEditor = () => {
+        if (editor) {
+            editor.setEditable(!editor.isEditable);
         }
     }
 

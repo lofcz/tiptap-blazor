@@ -807,4 +807,10 @@ kbd {
   padding: 8px;
   margin-top: 4px;
 }
-  
+
+[data-type="emoji"] {
+  img {
+    height: 1em;
+    width: 1em;
+  }
+}
