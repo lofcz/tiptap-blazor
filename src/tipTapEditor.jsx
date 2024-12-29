@@ -185,6 +185,14 @@ const TipTapEditor = forwardRef((
                             editor.chain().focus().toggleStrike().run()
                         )}
                     />
+                    <ToolbarButton
+                        icon="code"
+                        tooltip="Code"
+                        isActive={editor.isActive('code')}
+                        onClick={() => handleToolbarAction(() =>
+                            editor.chain().focus().toggleCode().run()
+                        )}
+                    />
                     <ColorPicker
                         icon="color-front"
                         editor={editor}
