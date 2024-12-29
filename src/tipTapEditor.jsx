@@ -15,6 +15,15 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import Paragraph from '@tiptap/extension-paragraph'
+import Bold from '@tiptap/extension-bold'
+import Italic from '@tiptap/extension-italic'
+import Code from '@tiptap/extension-code'
+import Strike from '@tiptap/extension-strike'
+import Underline from '@tiptap/extension-underline'
+import Link from '@tiptap/extension-link'
+import Dropcursor from '@tiptap/extension-dropcursor'
+import TaskItem from '@tiptap/extension-task-item'
+import TaskList from '@tiptap/extension-task-list'
 
 const CustomBulletList = BulletList.configure({
     HTMLAttributes: {
@@ -46,6 +55,12 @@ const TipTapEditor = forwardRef((
             Document,
             Text,
             Paragraph,
+            Bold,
+            Italic,
+            Code,
+            Strike,
+            Underline,
+            Link,
             Color,
             TextStyle,
             Highlight.configure({multicolor: true}),
@@ -56,7 +71,12 @@ const TipTapEditor = forwardRef((
             }),
             CustomBulletList,
             ListItem,
-            OrderedList
+            OrderedList,
+            Dropcursor,
+            TaskList,
+            TaskItem.configure({
+                nested: true,
+            })
         ],
         content: content,
         onUpdate: ({editor}) => {
@@ -126,7 +146,7 @@ const TipTapEditor = forwardRef((
     }), [editor])
 
     return (
-        <>
+        <div data-gramm={false} data-enable-grammarly={false} data-gramm_editor={false}>
             {editor && <BubbleMenu
 
                 editor={editor}
@@ -185,7 +205,7 @@ const TipTapEditor = forwardRef((
             </BubbleMenu>}
 
             <EditorContent editor={editor} className={editor && !editor.isEditable ? 'editorDisabled' : ''}/>
-        </>
+        </div>
     )
 })
 
