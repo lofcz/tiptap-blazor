@@ -2,10 +2,14 @@ import React, {useState, useEffect, useRef} from 'react'
 import TipTapIsland from './tiptap-island.js'
 import './styles.scss'
 
-function App({ initialContent = '<p>Hello TipTap!</p>', editorId = 'test-editor' }) {
+function App({ initialContent = 'Hello TipTap!', editorId = 'test-editor' }) {
     const [content, setContent] = useState(initialContent)
     const editorRef = useRef(null)
     const containerRef = useRef(null)
+
+    const getDisplayContent = () => {
+        return content
+    }
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -39,7 +43,7 @@ function App({ initialContent = '<p>Hello TipTap!</p>', editorId = 'test-editor'
 
             <div className="content-preview">
                 <h3>Current HTML Content:</h3>
-                <pre>{content}</pre>
+                <pre>{getDisplayContent()}</pre>
             </div>
         </div>
     )

@@ -35,7 +35,7 @@ const CustomBulletList = BulletList.configure({
     addInputRules() {
         return [
             wrappingInputRule({
-                find: /^-\s$/, // hledá "- " na začátku řádku
+                find: /^-\s$/,
                 type: this.type,
                 keepMarks: true,
                 keepAttributes: true,
@@ -54,11 +54,44 @@ const CustomEnterBehavior = Extension.create({
                 return this.editor.commands.setHardBreak()
             },
             'Shift-Enter': () => {
-                return this.editor.commands.splitBlock()
+                return this.editor.commands.insertContent({
+                    type: 'paragraph',
+                    attrs: { explicit: true },
+                })
             },
         }
     },
 })
+
+const CustomParagraph = Paragraph.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            explicit: {
+                default: false,
+                parseHTML: () => false,
+                renderHTML: (attributes) => {
+                    if (attributes.explicit) {
+                        return {}
+                    }
+                    return null
+                },
+            },
+        }
+    },
+    renderHTML({ node, HTMLAttributes }) {
+        if (node.attrs.explicit) {
+            return ['p', HTMLAttributes, 0]
+        }
+        return ['fragment', 0]
+    },
+})
+
+const cleanHtml = (html) => {
+    return html
+        .replace(/<fragment>(.*?)<\/fragment>/g, '$1')
+        .replace(/<br\s*\/?>/g, '\n');
+}
 
 const TipTapEditor = forwardRef((
     {
@@ -71,7 +104,7 @@ const TipTapEditor = forwardRef((
         extensions: [
             Document,
             Text,
-            Paragraph,
+            CustomParagraph,
             HardBreak,
             Bold,
             Italic,
@@ -101,7 +134,8 @@ const TipTapEditor = forwardRef((
         content: content,
         onUpdate: ({editor}) => {
             if (onUpdate) {
-                onUpdate(editor.getHTML())
+                const value = editor.isEmpty ? '' : editor.getHTML()
+                onUpdate(cleanHtml(value))
             }
         },
         editable: isEditable,
@@ -167,6 +201,10 @@ const TipTapEditor = forwardRef((
             if (editor) {
                 editor.setEditable(value)
             }
+        },
+        getContent: () => {
+            const value = editor.isEmpty ? '' : editor.getHTML()
+            return cleanHtml(value)
         }
     }), [editor])
 

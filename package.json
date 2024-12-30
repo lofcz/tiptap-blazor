@@ -25,6 +25,7 @@
     "@rollup/plugin-dynamic-import-vars": "^2.1.5",
     "@svgr/core": "^8.1.0",
     "@tiptap-pro/extension-emoji": "^2.17.0",
+    "@tiptap/core": "^2.10.4",
     "@tiptap/extension-bold": "^2.10.4",
     "@tiptap/extension-bubble-menu": "^2.10.4",
     "@tiptap/extension-bullet-list": "^2.10.4",

@@ -28,6 +28,12 @@ class TipTapWrapper {
         return this.editorRef.current?.editor?.isEditable ?? false
     }
 
+    getContent() {
+        if (this.editorRef.current) {
+            return this.editorRef.current.getContent();
+        }
+    }
+
     setContent(content) {
         if (this.editorRef.current?.editor) {
             this.editorRef.current.editor.commands.setContent(content)

@@ -9,7 +9,6 @@ const ReactDOMInstance = window.ReactDOM || ReactDOM
 ReactDOMInstance.createRoot(document.getElementById('root')).render(
     <ReactInstance.StrictMode>
         <App
-            initialContent="<p>Initial content</p>"
             editorId="custom-editor"
         />
     </ReactInstance.StrictMode>
