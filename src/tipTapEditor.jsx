@@ -1,5 +1,5 @@
 import {
-    BubbleMenu, EditorContent, textInputRule, useEditor, wrappingInputRule,
+    BubbleMenu, EditorContent, Extension, textInputRule, useEditor, wrappingInputRule,
 } from '@tiptap/react'
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react'
 import {Color} from '@tiptap/extension-color'
@@ -15,6 +15,7 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import Paragraph from '@tiptap/extension-paragraph'
+import HardBreak from '@tiptap/extension-hard-break'
 import Bold from '@tiptap/extension-bold'
 import Italic from '@tiptap/extension-italic'
 import Code from '@tiptap/extension-code'
@@ -44,6 +45,21 @@ const CustomBulletList = BulletList.configure({
     },
 })
 
+const CustomEnterBehavior = Extension.create({
+    name: 'customEnterBehavior',
+
+    addKeyboardShortcuts() {
+        return {
+            Enter: () => {
+                return this.editor.commands.setHardBreak()
+            },
+            'Shift-Enter': () => {
+                return this.editor.commands.splitBlock()
+            },
+        }
+    },
+})
+
 const TipTapEditor = forwardRef((
     {
          content,
@@ -56,6 +72,7 @@ const TipTapEditor = forwardRef((
             Document,
             Text,
             Paragraph,
+            HardBreak,
             Bold,
             Italic,
             Code,
@@ -78,7 +95,8 @@ const TipTapEditor = forwardRef((
             TaskItem.configure({
                 nested: true,
             }),
-            History
+            History,
+            CustomEnterBehavior
         ],
         content: content,
         onUpdate: ({editor}) => {
