@@ -23,22 +23,6 @@
   box-sizing: border-box
 }
 
-html {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
-  line-height: 1.5;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased
-}
-
-body {
-  min-height: 25rem;
-  margin: 0
-}
-
-:first-child {
-  margin-top: 0
-}
-
 .tiptap:focus {
   outline: none
 }
@@ -80,107 +64,116 @@ body {
   background-color: transparent
 }
 
-button, input, select, textarea {
-  background: var(--gray-2);
-  border-radius: .5rem;
-  border: none;
-  color: var(--black);
-  font-family: inherit;
-  font-size: .875rem;
-  font-weight: 500;
-  line-height: 1.15;
-  margin: 0;
-  padding: .375rem .625rem;
-  transition: all .2s cubic-bezier(.65, .05, .36, 1)
+.ProseMirror {
+  :first-child {
+    margin-top: 0
+  }
 }
 
-button:hover, input:hover, select:hover, textarea:hover {
-  background-color: var(--gray-3);
-  color: var(--black-contrast)
-}
+.tiptap {
 
-button[disabled], input[disabled], select[disabled], textarea[disabled] {
-  background: var(--gray-1);
-  color: var(--gray-4)
-}
+  button, input, select, textarea {
+    background: var(--gray-2);
+    border-radius: .5rem;
+    border: none;
+    color: var(--black);
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: 500;
+    line-height: 1.15;
+    margin: 0;
+    padding: .375rem .625rem;
+    transition: all .2s cubic-bezier(.65, .05, .36, 1)
+  }
 
-button:checked, input:checked, select:checked, textarea:checked {
-  accent-color: var(--purple)
-}
+  button:hover, input:hover, select:hover, textarea:hover {
+    background-color: var(--gray-3);
+    color: var(--black-contrast)
+  }
 
-button.primary, input.primary, select.primary, textarea.primary {
-  background: var(--black);
-  color: var(--white)
-}
+  button[disabled], input[disabled], select[disabled], textarea[disabled] {
+    background: var(--gray-1);
+    color: var(--gray-4)
+  }
 
-button.primary:hover, input.primary:hover, select.primary:hover, textarea.primary:hover {
-  background-color: var(--black-contrast)
-}
+  button:checked, input:checked, select:checked, textarea:checked {
+    accent-color: var(--purple)
+  }
 
-button.primary[disabled], input.primary[disabled], select.primary[disabled], textarea.primary[disabled] {
-  background: var(--gray-1);
-  color: var(--gray-4)
-}
+  button.primary, input.primary, select.primary, textarea.primary {
+    background: var(--black);
+    color: var(--white)
+  }
 
-button.is-active, input.is-active, select.is-active, textarea.is-active {
-  background: var(--purple);
-  color: var(--white)
-}
+  button.primary:hover, input.primary:hover, select.primary:hover, textarea.primary:hover {
+    background-color: var(--black-contrast)
+  }
 
-button.is-active:hover, input.is-active:hover, select.is-active:hover, textarea.is-active:hover {
-  background-color: var(--purple-contrast);
-  color: var(--white)
-}
+  button.primary[disabled], input.primary[disabled], select.primary[disabled], textarea.primary[disabled] {
+    background: var(--gray-1);
+    color: var(--gray-4)
+  }
 
-button:not([disabled]), select:not([disabled]) {
-  cursor: pointer
-}
+  button.is-active, input.is-active, select.is-active, textarea.is-active {
+    background: var(--purple);
+    color: var(--white)
+  }
 
-input[type=text], textarea {
-  background-color: unset;
-  border: 1px solid var(--gray-3);
-  border-radius: .5rem;
-  color: var(--black)
-}
+  button.is-active:hover, input.is-active:hover, select.is-active:hover, textarea.is-active:hover {
+    background-color: var(--purple-contrast);
+    color: var(--white)
+  }
 
-input[type=text]::-moz-placeholder, textarea::-moz-placeholder {
-  color: var(--gray-4)
-}
+  button:not([disabled]), select:not([disabled]) {
+    cursor: pointer
+  }
 
-input[type=text]::placeholder, textarea::placeholder {
-  color: var(--gray-4)
-}
+  input[type=text], textarea {
+    background-color: unset;
+    border: 1px solid var(--gray-3);
+    border-radius: .5rem;
+    color: var(--black)
+  }
 
-input[type=text]:hover, textarea:hover {
-  background-color: unset;
-  border-color: var(--gray-4)
-}
+  input[type=text]::-moz-placeholder, textarea::-moz-placeholder {
+    color: var(--gray-4)
+  }
 
-input[type=text]:focus-visible, input[type=text]:focus, textarea:focus-visible, textarea:focus {
-  border-color: var(--purple);
-  outline: none
-}
+  input[type=text]::placeholder, textarea::placeholder {
+    color: var(--gray-4)
+  }
 
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="Gray" d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right .1rem center;
-  background-size: 1.25rem 1.25rem;
-  padding-right: 1.25rem
-}
+  input[type=text]:hover, textarea:hover {
+    background-color: unset;
+    border-color: var(--gray-4)
+  }
 
-select:focus {
-  outline: 0
-}
+  input[type=text]:focus-visible, input[type=text]:focus, textarea:focus-visible, textarea:focus {
+    border-color: var(--purple);
+    outline: none
+  }
 
-form {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: .25rem
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="Gray" d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right .1rem center;
+    background-size: 1.25rem 1.25rem;
+    padding-right: 1.25rem
+  }
+
+  select:focus {
+    outline: 0
+  }
+
+  form {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem
+  }
 }
 
 .hint {
@@ -455,17 +448,13 @@ kbd {
 
   /* Code and preformatted text styles */
   code {
-    background-color: var(--purple-light);
     border-radius: 0.4rem;
-    color: var(--black);
     font-size: 0.85rem;
     padding: 0.25em 0.3em;
   }
 
   pre {
-    background: var(--black);
     border-radius: 0.5rem;
-    color: var(--white);
     font-family: 'JetBrainsMono', monospace;
     margin: 1.5rem 0;
     padding: 0.75rem 1rem;
@@ -506,14 +495,6 @@ kbd {
 
     &:hover {
       background-color: var(--gray-3);
-    }
-
-    &.is-active {
-      background-color: var(--purple);
-
-      &:hover {
-        background-color: var(--purple-contrast);
-      }
     }
   }
 }
