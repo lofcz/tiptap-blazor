@@ -36,7 +36,15 @@ class TipTapWrapper {
 
     setContent(content) {
         if (this.editorRef.current?.editor) {
-            this.editorRef.current.editor.commands.setContent(content)
+
+            const convertNewlinesToBr = (text) => {
+                if (typeof text !== 'string') {
+                    return text;
+                }
+                return text.replace(/\n/g, '<br>');
+            };
+
+            this.editorRef.current.editor.commands.setContent(convertNewlinesToBr(content), false, {preserveWhitespace: "full"});
         }
     }
 

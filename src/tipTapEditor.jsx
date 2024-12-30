@@ -79,6 +79,9 @@ const CustomParagraph = Paragraph.extend({
             },
         }
     },
+    addInputRules() {
+        return this.parent?.() || []
+    },
     renderHTML({ node, HTMLAttributes }) {
         if (node.attrs.explicit) {
             return ['p', HTMLAttributes, 0]
@@ -87,11 +90,27 @@ const CustomParagraph = Paragraph.extend({
     },
 })
 
+const CustomText = Text.extend({
+    addOptions() {
+        return {
+            ...this.parent?.(),
+            preserveWhitespace: "full",
+        }
+    }
+})
+
 const cleanHtml = (html) => {
     return html
-        .replace(/<fragment>(.*?)<\/fragment>/g, '$1')
+        .replace(/<fragment>(.*?)<\/fragment>/gs, '$1')
         .replace(/<br\s*\/?>/g, '\n');
 }
+
+const convertNewlinesToBr = (text) => {
+    if (typeof text !== 'string') {
+        return text;
+    }
+    return text.replace(/\n/g, '<br>');
+};
 
 const TipTapEditor = forwardRef((
     {
@@ -100,10 +119,13 @@ const TipTapEditor = forwardRef((
          isEditable = true
     },
     ref) => {
+
+    const [initialContent, setInitialContent] = useState(convertNewlinesToBr(content));
+
     const editor = useEditor({
         extensions: [
             Document,
-            Text,
+            CustomText,
             CustomParagraph,
             HardBreak,
             Bold,
@@ -131,7 +153,7 @@ const TipTapEditor = forwardRef((
             History,
             CustomEnterBehavior
         ],
-        content: content,
+        content: initialContent,
         onUpdate: ({editor}) => {
             if (onUpdate) {
                 const value = editor.isEmpty ? '' : editor.getHTML()
@@ -143,6 +165,9 @@ const TipTapEditor = forwardRef((
             editor.view.dom.setAttribute("data-gramm", "false");
             editor.view.dom.setAttribute("data-enable-grammarly", "false");
             editor.view.dom.setAttribute("data-gramm_editor", "false");
+        },
+        parseOptions: {
+            preserveWhitespace: "full",
         },
     })
 

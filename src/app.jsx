@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import TipTapIsland from './tiptap-island.js'
 import './styles.scss'
 
-function App({ initialContent = 'Hello TipTap!', editorId = 'test-editor' }) {
+function App({ initialContent = 'Hello\n\nTipTap!', editorId = 'test-editor' }) {
     const [content, setContent] = useState(initialContent)
     const editorRef = useRef(null)
     const containerRef = useRef(null)
