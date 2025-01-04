@@ -48,7 +48,8 @@ export default defineConfig({
                 },
                 chunkFileNames: '[name].js',
                 manualChunks: undefined,
-                inlineDynamicImports: true
+                inlineDynamicImports: true,
+                assetFileNames: 'tiptap-island[extname]'
             }
         },
         cssCodeSplit: false,
