@@ -1,0 +1,10 @@
+{
+    "bold": "Tučné",
+    "italic": "Kurzíva",
+    "strike": "Přeškrtnuté",
+    "code": "Kód",
+    "textColor": "Barva textu",
+    "backgroundColor": "Barva pozadí",
+    "customColor": "Vlastní barva",
+    "resetColor": "Obnovit barvu"
+} 

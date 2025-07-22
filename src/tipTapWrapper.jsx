@@ -20,7 +20,7 @@ class TipTapWrapper {
 
     setEditable(value) {
         if (this.editorRef.current?.editor) {
-            this.editorRef.current.editor.setEditable(value)
+            this.editorRef.current.setEditable(value)
         }
     }
 
@@ -36,7 +36,6 @@ class TipTapWrapper {
 
     setContent(content) {
         if (this.editorRef.current?.editor) {
-
             const convertNewlinesToBr = (text) => {
                 if (typeof text !== 'string') {
                     return text;
@@ -44,8 +43,14 @@ class TipTapWrapper {
                 return text.replace(/\n/g, '<br>');
             };
 
-            this.editorRef.current.editor.commands.setContent(convertNewlinesToBr(content), false, {preserveWhitespace: "full"});
+            this.editorRef.current.editor.commands.setContent(convertNewlinesToBr(content));
         }
+    }
+
+    setTheme(theme) {
+        if (this.options.theme === theme) return;
+        this.options.theme = theme;
+        this.mount();
     }
 
     mount() {
@@ -54,7 +59,8 @@ class TipTapWrapper {
                 ReactInstance.createElement(TipTapEditor, {
                     ref: this.editorRef,
                     content: this.options.content,
-                    onUpdate: this.options.onUpdate
+                    onUpdate: this.options.onUpdate,
+                    theme: this.options.theme
                 })
             )
         }
@@ -63,7 +69,10 @@ class TipTapWrapper {
     destroy() {
         if (this.editorRef.current) {
             this.editorRef.current.destroy()
-            this.editorRef = null
+        }
+        if (this.root) {
+            this.root.unmount();
+            this.root = null;
         }
     }
 }

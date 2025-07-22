@@ -1,6 +1,5 @@
 import {ReactRenderer} from '@tiptap/react'
-import tippy from 'tippy.js'
-
+import {computePosition, flip, shift, offset} from '@floating-ui/dom';
 import {EmojiList} from './EmojiList'
 
 export default
@@ -45,37 +44,72 @@ export default
         let component
         let popup
 
+        const showPopup = (props) => {
+            popup = document.createElement('div');
+            popup.classList.add('suggestion-popup');
+            document.body.appendChild(popup);
+
+            component = new ReactRenderer(EmojiList, {
+                props,
+                editor: props.editor,
+            }, popup);
+            
+            const virtualEl = {
+                getBoundingClientRect: props.clientRect,
+            };
+
+            computePosition(virtualEl, popup, {
+                placement: 'bottom-start',
+                middleware: [offset(10), flip(), shift()],
+            }).then(({x, y}) => {
+                Object.assign(popup.style, {
+                    left: `${x}px`,
+                    top: `${y}px`,
+                });
+            });
+        };
+
+        const hidePopup = () => {
+            if (popup) {
+                popup.remove();
+                popup = null;
+            }
+            if (component) {
+                component.destroy();
+                component = null;
+            }
+        };
+
         return {
             onStart: props => {
-                component = new ReactRenderer(EmojiList, {
-                    props,
-                    editor: props.editor,
-                })
-
-                popup = tippy('body', {
-                    getReferenceClientRect: props.clientRect,
-                    appendTo: () => document.body,
-                    content: component.element,
-                    showOnCreate: true,
-                    interactive: true,
-                    trigger: 'manual',
-                    placement: 'bottom-start',
-                })
+                showPopup(props);
             },
 
             onUpdate(props) {
-                component.updateProps(props)
+                if (component) {
+                    component.updateProps(props);
 
-                popup[0].setProps({
-                    getReferenceClientRect: props.clientRect,
-                })
+                    const virtualEl = {
+                        getBoundingClientRect: props.clientRect,
+                    };
+
+                    computePosition(virtualEl, popup, {
+                        placement: 'bottom-start',
+                        middleware: [offset(10), flip(), shift()],
+                    }).then(({x, y}) => {
+                        Object.assign(popup.style, {
+                            left: `${x}px`,
+                            top: `${y}px`,
+                        });
+                    });
+                } else {
+                    showPopup(props);
+                }
             },
 
             onKeyDown(props) {
                 if (props.event.key === 'Escape') {
-                    popup[0].hide()
-                    component.destroy()
-
+                    hidePopup();
                     return true
                 }
 
@@ -83,8 +117,7 @@ export default
             },
 
             onExit() {
-                popup[0].destroy()
-                component.destroy()
+                hidePopup();
             },
         }
     },

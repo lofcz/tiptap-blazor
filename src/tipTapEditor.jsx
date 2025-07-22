@@ -1,17 +1,16 @@
 import {
-    BubbleMenu, EditorContent, Extension, textInputRule, useEditor, wrappingInputRule,
+    EditorContent, Extension, textInputRule, useEditor, wrappingInputRule,
 } from '@tiptap/react'
-import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react'
+import {BubbleMenu} from "@tiptap/react/menus";
+import React, {forwardRef, useEffect, useImperativeHandle, useRef, useState} from 'react'
 import {Color} from '@tiptap/extension-color'
-import TextStyle from '@tiptap/extension-text-style'
+import {TextStyle} from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import ColorPicker from './ColorPicker.jsx'
 import ToolbarButton from "./ToolbarButton.jsx"
-// import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji'
-import suggestion from './suggestion'
-import BulletList from '@tiptap/extension-bullet-list'
-import ListItem from '@tiptap/extension-list-item'
-import OrderedList from '@tiptap/extension-ordered-list'
+import {
+    BulletList, ListItem, OrderedList,
+} from '@tiptap/extension-list';
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -22,10 +21,11 @@ import Code from '@tiptap/extension-code'
 import Strike from '@tiptap/extension-strike'
 import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
-import Dropcursor from '@tiptap/extension-dropcursor'
-import TaskItem from '@tiptap/extension-task-item'
-import TaskList from '@tiptap/extension-task-list'
-import History from '@tiptap/extension-history'
+import {TaskList} from '@tiptap/extension-task-list'
+import TaskItem from "@tiptap/extension-task-item";
+import {Dropcursor} from '@tiptap/extensions';
+import {History} from "@tiptap/extension-history";
+import i18n from "./i18n.js";
 
 const CustomBulletList = BulletList.configure({
     HTMLAttributes: {
@@ -116,10 +116,23 @@ const TipTapEditor = forwardRef((
     {
          content,
          onUpdate,
-         isEditable = true
+         isEditable = true,
+         theme = 'light'
     },
     ref) => {
 
+    const [, forceUpdate] = useState({});
+    const toolbarRef = useRef(null);
+    const textColorPickerRef = useRef(null);
+    const backgroundColorPickerRef = useRef(null);
+
+    useEffect(() => {
+        const unsubscribe = i18n.subscribe(() => {
+            forceUpdate({});
+        });
+        return () => unsubscribe();
+    }, []);
+    
     const [initialContent, setInitialContent] = useState(convertNewlinesToBr(content));
 
     const editor = useEditor({
@@ -137,20 +150,15 @@ const TipTapEditor = forwardRef((
             Color,
             TextStyle,
             Highlight.configure({multicolor: true}),
-            /*Emoji.configure({
-                emojis: gitHubEmojis,
-                enableEmoticons: true,
-                suggestion,
-            }),*/
             CustomBulletList,
             ListItem,
             OrderedList,
-            Dropcursor,
+            Dropcursor.configure(),
             TaskList,
             TaskItem.configure({
                 nested: true,
             }),
-            History,
+            History.configure(),
             CustomEnterBehavior
         ],
         content: initialContent,
@@ -160,7 +168,16 @@ const TipTapEditor = forwardRef((
                 onUpdate(cleanHtml(value))
             }
         },
+        onSelectionUpdate: ({ editor }) => {
+            if (editor.state.selection.empty) {
+                setActiveColorPicker(null)
+            }
+        },
+        onBlur: () => {
+            setActiveColorPicker(null)
+        },
         editable: isEditable,
+        shouldRerenderOnTransaction: true,
         onCreate: ({ editor }) => {
             editor.view.dom.setAttribute("data-gramm", "false");
             editor.view.dom.setAttribute("data-enable-grammarly", "false");
@@ -172,13 +189,43 @@ const TipTapEditor = forwardRef((
     })
 
     const [activeColorPicker, setActiveColorPicker] = useState(null)
-    const [isToolbarVisible, setIsToolbarVisible] = useState(false)
 
+    // Global outside-click handler: closes open colour pickers and blurs the editor
     useEffect(() => {
-        if (!isToolbarVisible) {
-            setActiveColorPicker(null)
+        if (!editor) return;
+
+        function handleClick(e) {
+            const toolbarNode = toolbarRef.current;
+            const textPickerNode = textColorPickerRef.current;
+            const bgPickerNode = backgroundColorPickerRef.current;
+            const editorDom = editor.view.dom;
+            const target = e.target;
+
+            // Ignore clicks that occur inside the editor itself, the toolbar, or either picker
+            if (
+                (editorDom && editorDom.contains(target)) ||
+                (toolbarNode && toolbarNode.contains(target)) ||
+                (textPickerNode && textPickerNode.contains(target)) ||
+                (bgPickerNode && bgPickerNode.contains(target))
+            ) {
+                return;
+            }
+
+            // Close any open picker
+            if (activeColorPicker) {
+                setActiveColorPicker(null);
+            }
+
+            // Collapse selection and blur editor so BubbleMenu hides
+            const pos = editor.state.selection.to;
+            editor.chain().setTextSelection(pos).run();
+            editor.commands.blur();
         }
-    }, [isToolbarVisible])
+
+        // Capture phase ensures we see the click before any component inside may stop propagation
+        document.addEventListener('mousedown', handleClick, true);
+        return () => document.removeEventListener('mousedown', handleClick, true);
+    }, [activeColorPicker, editor]);
 
     useEffect(() => {
         if (editor) {
@@ -203,16 +250,21 @@ const TipTapEditor = forwardRef((
     }
 
     const handleColorPickerOpen = (pickerType) => {
-        setActiveColorPicker(activeColorPicker === pickerType ? null : pickerType)
+        if (activeColorPicker === pickerType) {
+            // We are closing the currently open picker – collapse the selection and blur the editor
+            setActiveColorPicker(null)
+            if (editor) {
+                // Re-focus the editor so BubbleMenu stays visible and will later hide on an external blur
+                editor.chain().focus().run()
+            }
+        } else {
+            setActiveColorPicker(pickerType)
+        }
     }
 
     const handleToolbarAction = (action) => {
         setActiveColorPicker(null)
         action()
-    }
-
-    const handleToolbarVisibilityChange = (visible) => {
-        setIsToolbarVisible(visible)
     }
 
     useImperativeHandle(ref, () => ({
@@ -234,72 +286,70 @@ const TipTapEditor = forwardRef((
     }), [editor])
 
     return (
-        <div data-gramm={false} data-enable-grammarly={false} data-gramm_editor={false}>
+        <div data-gramm={false} data-enable-grammarly={false} data-gramm_editor={false} className={`${theme}-theme`}>
             {editor && <BubbleMenu
-
                 editor={editor}
-                tippyOptions={{
-                    duration: 10,
-                    allowHTML: true,
-                    onShow: () => handleToolbarVisibilityChange(true),
-                    onHide: () => handleToolbarVisibilityChange(false)
-                }}
+                className="bubble-menu"
                 updateDelay={120}
+                pluginKey="bubbleMenu"
+                ref={toolbarRef}
             >
-                <div className="bubble-menu">
-                    <ToolbarButton
-                        icon="bold"
-                        tooltip="Bold"
-                        isActive={editor.isActive('bold')}
-                        onClick={() => handleToolbarAction(() =>
-                            editor.chain().focus().toggleBold().run()
-                        )}
-                    />
-                    <ToolbarButton
-                        icon="italic"
-                        tooltip="Italic"
-                        isActive={editor.isActive('italic')}
-                        onClick={() => handleToolbarAction(() =>
-                            editor.chain().focus().toggleItalic().run()
-                        )}
-                    />
-                    <ToolbarButton
-                        icon="strike"
-                        tooltip="Strike"
-                        isActive={editor.isActive('strike')}
-                        onClick={() => handleToolbarAction(() =>
-                            editor.chain().focus().toggleStrike().run()
-                        )}
-                    />
-                    <ToolbarButton
-                        icon="code"
-                        tooltip="Code"
-                        isActive={editor.isActive('code')}
-                        onClick={() => handleToolbarAction(() =>
-                            editor.chain().focus().toggleCode().run()
-                        )}
-                    />
-                    <ColorPicker
-                        icon="color-front"
-                        editor={editor}
-                        type="text"
-                        label="Text Color"
-                        currentColor={editor.getAttributes('textStyle').color}
-                        onColorChange={handleTextColorChange}
-                        isOpen={activeColorPicker === 'text'}
-                        onOpenChange={() => handleColorPickerOpen('text')}
-                    />
-                    <ColorPicker
-                        icon="color-back"
-                        editor={editor}
-                        type="background"
-                        label="Background"
-                        currentColor={editor.getAttributes('highlight').color}
-                        onColorChange={handleBackgroundColorChange}
-                        isOpen={activeColorPicker === 'background'}
-                        onOpenChange={() => handleColorPickerOpen('background')}
-                    />
-                </div>
+                <ToolbarButton
+                    icon="bold"
+                    tooltip={i18n.t('bold')}
+                    isActive={editor.isActive('bold')}
+                    onClick={() => handleToolbarAction(() =>
+                        editor.chain().focus().toggleBold().run()
+                    )}
+                />
+                <ToolbarButton
+                    icon="italic"
+                    tooltip={i18n.t('italic')}
+                    isActive={editor.isActive('italic')}
+                    onClick={() => handleToolbarAction(() =>
+                        editor.chain().focus().toggleItalic().run()
+                    )}
+                />
+                <ToolbarButton
+                    icon="strike"
+                    tooltip={i18n.t('strike')}
+                    isActive={editor.isActive('strike')}
+                    onClick={() => handleToolbarAction(() =>
+                        editor.chain().focus().toggleStrike().run()
+                    )}
+                />
+                <ToolbarButton
+                    icon="code"
+                    tooltip={i18n.t('code')}
+                    isActive={editor.isActive('code')}
+                    onClick={() => handleToolbarAction(() =>
+                        editor.chain().focus().toggleCode().run()
+                    )}
+                />
+                <span ref={textColorPickerRef}>
+                <ColorPicker
+                    icon="color-front"
+                    editor={editor}
+                    type="text"
+                    label={i18n.t('textColor')}
+                    currentColor={editor.getAttributes('textStyle').color}
+                    onColorChange={handleTextColorChange}
+                    isOpen={activeColorPicker === 'text'}
+                    onOpenChange={() => handleColorPickerOpen('text')}
+                />
+                </span>
+                <span ref={backgroundColorPickerRef}>
+                <ColorPicker
+                    icon="color-back"
+                    editor={editor}
+                    type="background"
+                    label={i18n.t('backgroundColor')}
+                    currentColor={editor.getAttributes('highlight').color}
+                    onColorChange={handleBackgroundColorChange}
+                    isOpen={activeColorPicker === 'background'}
+                    onOpenChange={() => handleColorPickerOpen('background')}
+                />
+                </span>
             </BubbleMenu>}
 
             <EditorContent editor={editor} className={editor && !editor.isEditable ? 'editorDisabled' : ''}/>

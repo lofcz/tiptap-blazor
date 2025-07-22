@@ -1,3 +1,5 @@
+@import 'themes';
+
 :root {
   --white: #FFF;
   --black: #2E2B29;
@@ -824,15 +826,31 @@ ul[data-type="taskList"] {
 [data-tooltip] {
   position: relative;
 
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #333;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    transition-delay: 0s;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
   &::after {
     content: attr(data-tooltip);
     position: absolute;
-    bottom: 100%;
+    bottom: calc(100% + 5px);
     left: 50%;
     transform: translateX(-50%);
     padding: 4px 8px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
+    background-color: #333;
+    color: #eee;
     border-radius: 4px;
     font-size: 12px;
     white-space: nowrap;
@@ -846,10 +864,136 @@ ul[data-type="taskList"] {
     transition-delay: 0s;
   }
 
-  &:hover::after {
+  &:hover::after,
+  &:hover::before {
     opacity: 1;
     visibility: visible;
+    transition-delay: 0.1s;
+  }
+}
+
+.dark-theme .editor-container {
+  border-color: #444;
+}
+
+.dark-theme .content-preview {
+  background: #222;
+  color: #eee;
+}
+
+.dark-theme .content-preview pre {
+  background: #333;
+  border-color: #555;
+}
+
+.dark-theme .bubble-menu {
+  background-color: #333;
+  border-color: #555;
+}
+
+.dark-theme .color-picker-dropdown {
+  background-color: #333;
+  border-color: #555;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme .color-option.is-active {
+  border-color: #fff;
+}
+
+.dark-theme .color-option:hover::after {
+  background: #eee;
+  color: #333;
+}
+
+.dark-theme .color-option:hover::before {
+  border-top-color: #eee;
+}
+
+.dark-theme .unset-color-btn {
+  background: #555;
+  border: 1px solid #777;
+}
+
+.dark-theme .unset-color-btn:hover {
+  background: #666;
+}
+
+.dark-theme .custom-color-picker-popup {
+  background: #333;
+}
+
+.dark-theme .react-colorful {
+  background: #2d2d2d;
+}
+
+.bubble-menu input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.bubble-menu input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.bubble-menu input[type="color"]::-webkit-color-swatch {
+  border: none;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.theme-switcher,
+.locale-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dark-theme .color-picker-dropdown [data-tooltip]:hover {
+  &::after {
+    background-color: #eee;
+    color: #333;
+  }
+  &::before {
+    border-top-color: #eee;
+  }
+}
+
+.tiptap ~ grammarly-extension {
+  display: none;
+}
+
+.dark-theme .color-picker-dropdown [data-tooltip] {
+  &::after {
+    background-color: #eee;
+    color: #333;
+  }
+
+  &::before {
+    border-top-color: #eee;
+  }
+
+  &:hover::after,
+  &:hover::before {
     transition-delay: 0s;
+  }
+}
+
+.dark-theme [data-tooltip] {
+  &::before {
+    border-top-color: rgba(0, 0, 0, 0.8);
+  }
+  &::after {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
   }
 }
 

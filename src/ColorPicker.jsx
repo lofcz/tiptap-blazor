@@ -2,7 +2,9 @@ import React, {useState, useCallback, useEffect} from 'react'
 import {HexColorPicker} from 'react-colorful'
 import ColorIndicator from './ColorIndicator.jsx'
 import {ICONS, isIconAvailable, loadIcon} from "./icons.js";
-import styles from './ColorPicker.module.scss'
+import pickerStyles from './ColorPicker.module.scss'
+import buttonStyles from './ToolbarButton.module.scss';
+import i18n from './i18n.js';
 
 const COLORS = [
     ['#958DF1', '#F98181', '#FBBC88'],
@@ -70,22 +72,21 @@ const ColorPicker = ({
 
 
     return (
-        <div className={styles.colorPickerWrapper}>
+        <div className={pickerStyles.colorPickerWrapper}>
             <button
-                className={styles.colorPickerTrigger}
+                className={pickerStyles.colorPickerTrigger}
                 onClick={() => onOpenChange()}
                 data-tooltip={label}
             >
                 {IconComponent ? (
-                    <IconComponent className={styles.toolbarIcon} />
+                    <IconComponent className={buttonStyles.toolbarIcon} />
                 ) : (
-                    <div className={styles.iconPlaceholder} />
+                    <div className={pickerStyles.iconPlaceholder} />
                 )}
                 <div
-                    className={styles.colorIndicator}
+                    className={pickerStyles.colorIndicator}
                     style={{
                         backgroundColor: currentColor || 'transparent',
-                        border: currentColor ? 'none' : `1px solid var(--gray-3)`
                     }}
                 />
             </button>
@@ -115,12 +116,12 @@ const ColorPicker = ({
                             <button
                                 className="color-option custom-color-button"
                                 onClick={handleCustomPickerClick}
-                                data-tooltip="Custom color"
+                                data-tooltip={i18n.t('customColor')}
                             />
                             <button
                                 className="color-option unset-color-button"
                                 onClick={handleResetColor}
-                                data-tooltip="Reset color"
+                                data-tooltip={i18n.t('resetColor')}
                             />
                         </div>
                     </div>

@@ -1,0 +1,21 @@
+.light-theme {
+  --toolbar-text-color: #333;
+  --toolbar-hover-bg: rgba(0, 0, 0, 0.05);
+  --toolbar-active-bg: rgba(0, 0, 0, 0.1);
+  --toolbar-active-text-color: #000;
+  --toolbar-disabled-bg: #f0f0f0;
+  --toolbar-disabled-text-color: #ccc;
+  --toolbar-icon-fill: #333;
+  --toolbar-active-icon-fill: #000;
+}
+
+.dark-theme {
+  --toolbar-text-color: #eee;
+  --toolbar-hover-bg: rgba(255, 255, 255, 0.1);
+  --toolbar-active-bg: rgba(255, 255, 255, 0.2);
+  --toolbar-active-text-color: #fff;
+  --toolbar-disabled-bg: #444;
+  --toolbar-disabled-text-color: #888;
+  --toolbar-icon-fill: #eee;
+  --toolbar-active-icon-fill: #fff;
+} 
